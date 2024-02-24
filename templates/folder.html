@@ -1,0 +1,18 @@
+{{ define "Folder" }}
+<div class="folder border rounded">
+	<div class="folder-head">
+		{{ .Name }}/
+	</div>
+	<div class="folder-contents pl-4">
+		{{ range .Files }}
+		<div class="file">
+			{{ .Name }}
+		</div>
+		{{ end }}
+
+		{{ range .Folders }}
+			{{ template "Folder" . }}
+		{{ end }}
+	</div>
+</div>
+{{ end }}
