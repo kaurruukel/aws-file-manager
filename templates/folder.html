@@ -1,18 +1,60 @@
 {{ define "Folder" }}
-<div class="folder border rounded">
-	<div class="folder-head">
-		{{ .Name }}/
+<div class="p-2 pb-0 pr-0 folder border rounded flex flex-col gap-2" id="{{ .Selector }}">
+	<div class="folder-head flex" id={{ .Path }}>
+		<p class="my-target my-auto w-full h-full">
+			{{ .Name }}/
+		</p>
+		{{ template "Delete" . }}
+		{{ template "Upload" . }}
 	</div>
-	<div class="folder-contents pl-4">
+	<div class="folder-contents pl-4 flex flex-col gap-2">
 		{{ range .Files }}
-		<div class="file">
-			{{ .Name }}
+		<div class="file border border-black rounded flex p-2" id="{{ .Selector }}">
+			<p class="my-auto w-full h-full">
+				{{ .Name }}
+			</p>
+			{{ template "Delete" . }}
+			{{ template "Download" . }}
 		</div>
 		{{ end }}
 
 		{{ range .Folders }}
-			{{ template "Folder" . }}
+		{{ template "Folder" . }}
 		{{ end }}
 	</div>
 </div>
+{{ end }}
+
+{{ define "Download" }}
+<div class="aspect-square h-8 flex m-auto mr-0 border rounded border-white cursor-pointer"
+	onclick="downloadFile('{{ .Path }}')">
+	<p class="m-auto">
+		&#x2193;
+	</p>
+</div>
+{{ end }}
+
+{{ define "Upload" }}
+
+<form hx-post="/upload-file?path={{ .Path }}" hx-trigger="change" hx-boost="true" hx-swap="none"
+	hx-encoding="multipart/form-data">
+	<input type="file" id="aws{{.Path}}" name="aws" style="display: none;">
+	<button class="aspect-square h-8 flex m-auto mr-2 border rounded border-white" type="button"
+		onclick="document.getElementById('aws{{.Path}}').click()">
+		<p class="m-auto">
+			&#x2191;
+		</p>
+	</button>
+</form>
+{{ end }}
+
+
+{{ define "Delete" }}
+<button class="aspect-square h-8 flex m-auto mr-2 border rounded border-white cursor-pointer"
+	hx-delete="/delete-obj?path={{ .Path }}" hx-target="#{{ .Selector }}"
+	hx-headers='{"Content-Type": "application/json"}' hx-swap="outerHTML">
+	<p class="m-auto">
+		&#x1F5D1;
+	</p>
+</button>
 {{ end }}
