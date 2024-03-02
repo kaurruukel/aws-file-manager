@@ -1,5 +1,18 @@
-document.addEventListener("DOMContentLoaded", () => {
+
+window.onload = function() {
+	var select = document.getElementById("select")
+	if (select.selectedIndex != 0) {
+		select.dispatchEvent(new Event("change"))
+	}
+}
+
+
+
+document.addEventListener('htmx:afterOnLoad', function() {
 	fhl = document.querySelectorAll(".my-target");
+	if (fhl.length == 0) {
+		return
+	}
 	fobj = {};
 	for (let i = 0; i < fhl.length; i++) {
 		fh = fhl[i];
@@ -15,10 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		})
 	}
 
-	// opon the root folder
-	document.getElementById("/").click()
-})
 
+});
 function downloadFile(key) {
 	fetch("/download-file?key=" + key)
 		.then(async response => {
@@ -37,4 +48,14 @@ function downloadFile(key) {
 			a.click();
 			a.remove();
 		});
+}
+
+document.addEventListener("keydown", (e) => {
+	if (e.key == "Escape") {
+		document.querySelector("#overlay").style.display = "none";
+	}
+})
+
+function hideOverlay() {
+	document.querySelector("#overlay").style.display = "none";
 }

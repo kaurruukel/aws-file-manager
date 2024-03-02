@@ -1,0 +1,24 @@
+<div class="p-2 pb-0 pr-0 folder border rounded flex flex-col gap-2" id="object-{{ .Selector }}">
+
+	<div class="flex" id="head-root">
+		<p class="my-target my-auto w-full h-full">
+		</p>
+		{{ template "CreateFolder" . }}
+		{{ template "Upload" . }}
+	</div>
+	<div class="pl-4 flex flex-col gap-2" id="contents-root">
+		{{ range .Files }}
+		<div class="file border border-black rounded flex p-2" id="object-{{ .Selector }}">
+			<p class="my-auto w-full h-full">
+				{{ .Name }}
+			</p>
+			{{ template "Delete" . }}
+			{{ template "Download" . }}
+		</div>
+		{{ end }}
+
+		{{ range .Folders }}
+		{{ template "Folder" . }}
+		{{ end }}
+	</div>
+</div>

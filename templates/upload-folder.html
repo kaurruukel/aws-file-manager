@@ -1,0 +1,16 @@
+<div id="overlay" class="flex justify-center items-center absolute backdrop-blur-md w-full h-full">
+
+	<div class="border border-white rounded p-8 flex flex-col gap-2">
+
+		<p>Creating folder on path: {{ .Path }}</p>
+		<form class="flex flex-col gap-2" hx-get="/create-folder?path={{ .Path }}" hx-trigger="change" hx-boost="true"
+			hx-swap="beforeend" hx-target="#contents-{{ .Selector }}" hx-encoding="multipart/form-data">
+			<input type="text" name="f-name" placeholder="folder name" class="bg-black border-white border rounded p-2">
+			<button class="h-8 flex m-auto border rounded border-white px-2" type="button" onclick="hideOverlay()">
+				<p class="m-auto">
+					Create folder
+				</p>
+			</button>
+		</form>
+	</div>
+</div>

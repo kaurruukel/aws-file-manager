@@ -13,9 +13,24 @@
 	</style>
 </head>
 
-<body class="bg-black p-10 flex flex-col gap-4">
-	<h1 class="">aws s3 file manager</h1>
-	{{ template "Folder" .}}
+<body class="bg-black ">
+	<div id="overlay" class="flex  absolute justify-center items-center" style="display: none;">
+
+	</div>
+	<div class="w-full flex flex-col gap-4 h-full p-10">
+
+		<h1 class="">aws s3 file manager</h1>
+		<select class="bg-black border border-white rounded p-2" id="select" type="text" name="bucket"
+			hx-get="/explorer" hx-trigger="change" hx-target="#explorer">
+			<option value="" selected disabled>Select a bucket</option>
+			{{ range . }}
+			<option value="{{ . }}">{{ . }}</option>
+			{{ end }}
+		</select>
+		<div id="explorer">
+
+		</div>
+	</div>
 </body>
 
 </html>

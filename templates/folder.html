@@ -1,15 +1,16 @@
 {{ define "Folder" }}
-<div class="p-2 pb-0 pr-0 folder border rounded flex flex-col gap-2" id="{{ .Selector }}">
-	<div class="folder-head flex" id={{ .Path }}>
+<div class="p-2 pb-0 pr-0 folder border rounded flex flex-col gap-2" id="object-{{ .Selector }}">
+	<div class="folder-head flex" id="head-{{ .Path }}">
 		<p class="my-target my-auto w-full h-full">
 			{{ .Name }}/
 		</p>
+		{{ template "CreateFolder" . }}
 		{{ template "Delete" . }}
 		{{ template "Upload" . }}
 	</div>
-	<div class="folder-contents pl-4 flex flex-col gap-2">
+	<div class="folder-contents pl-4 flex flex-col gap-2" id="contents-{{ .Selector }}">
 		{{ range .Files }}
-		<div class="file border border-black rounded flex p-2" id="{{ .Selector }}">
+		<div class="file border border-black rounded flex p-2" id="object-{{ .Selector }}">
 			<p class="my-auto w-full h-full">
 				{{ .Name }}
 			</p>
@@ -36,8 +37,8 @@
 
 {{ define "Upload" }}
 
-<form hx-post="/upload-file?path={{ .Path }}" hx-trigger="change" hx-boost="true" hx-swap="none"
-	hx-encoding="multipart/form-data">
+<form hx-post="/upload-file?path={{ .Path }}" hx-trigger="change" hx-boost="true" hx-swap="beforeend"
+	hx-encoding="multipart/form-data" hx-target="#contents-{{ .Selector }}">
 	<input type="file" id="aws{{.Path}}" name="aws" style="display: none;">
 	<button class="aspect-square h-8 flex m-auto mr-2 border rounded border-white" type="button"
 		onclick="document.getElementById('aws{{.Path}}').click()">
@@ -51,10 +52,20 @@
 
 {{ define "Delete" }}
 <button class="aspect-square h-8 flex m-auto mr-2 border rounded border-white cursor-pointer"
-	hx-delete="/delete-obj?path={{ .Path }}" hx-target="#{{ .Selector }}"
+	hx-delete="/delete-obj?path={{ .Path }}" hx-target="#object-{{ .Selector }}"
 	hx-headers='{"Content-Type": "application/json"}' hx-swap="outerHTML">
 	<p class="m-auto">
 		&#x1F5D1;
+	</p>
+</button>
+{{ end }}
+
+
+{{ define "CreateFolder" }}
+<button class="aspect-square h-8 flex m-auto mr-2 border rounded border-white cursor-pointer"
+	hx-get="/show-overlay?path={{ .Path }}" hx-target="#overlay" hx-swap="outerHTML">
+	<p class="m-auto">
+		/
 	</p>
 </button>
 {{ end }}
